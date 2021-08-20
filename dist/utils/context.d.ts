@@ -1,0 +1,1 @@
+export declare const GOLDEN_LAYOUT_CONTEXT = "GOLDEN_LAYOUT_CONTEXT";
