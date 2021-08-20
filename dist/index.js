@@ -9038,6 +9038,10 @@ class GoldenLayoutRoot extends BaseElement {
           display: flex;
           flex: 1;
         }
+
+        .lm_content {
+          display: flex;
+        }
       `,
             baseStyles,
             theme,
