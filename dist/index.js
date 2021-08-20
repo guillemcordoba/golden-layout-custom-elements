@@ -8489,7 +8489,9 @@ class GoldenLayoutRegister extends BaseElement {
         const children = await this.getSlottedChildren();
         const template = children[0];
         new ContextController(this, value => {
-            this.register(value, template);
+            if (value) {
+                this.register(value, template);
+            }
         }, GOLDEN_LAYOUT_CONTEXT);
     }
     render() {
@@ -8515,7 +8517,9 @@ class GoldenLayoutDragSource extends BaseElement {
     async firstUpdated() {
         const children = await this.getSlottedChildren();
         new ContextController(this, value => {
-            value.newDragSource(children[0], this.componentType);
+            if (value) {
+                value.newDragSource(children[0], this.componentType);
+            }
         }, GOLDEN_LAYOUT_CONTEXT);
     }
     render() {
