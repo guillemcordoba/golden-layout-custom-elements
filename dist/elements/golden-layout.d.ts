@@ -1,7 +1,7 @@
+import { Constructor } from '@open-wc/scoped-elements/types/src/types';
 import { LayoutConfig, ResolvedLayoutConfig } from 'golden-layout';
 import { ContextProvider } from '@holochain-open-dev/context';
 import { BaseElement } from '../utils/base-element';
-import { Constructor } from '@open-wc/scoped-elements/types/src/types';
 export declare class GoldenLayout extends BaseElement {
     scopedElements: {
         [key: string]: Constructor<HTMLElement>;

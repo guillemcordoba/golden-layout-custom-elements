@@ -1,4 +1,5 @@
 import { css, html } from 'lit';
+import { Constructor } from '@open-wc/scoped-elements/types/src/types';
 
 import {
   GoldenLayout as GoldenLayoutClass,
@@ -12,7 +13,6 @@ import { ContextProvider } from '@holochain-open-dev/context';
 import { BaseElement } from '../utils/base-element';
 import { GOLDEN_LAYOUT_CONTEXT } from '../utils/context';
 import { INIT_LAYOUT_EVENT, ROOT_LOADED_EVENT } from '../utils/events';
-import { Constructor } from '@open-wc/scoped-elements/types/src/types';
 
 export class GoldenLayout extends BaseElement {
   @property()
@@ -50,6 +50,12 @@ export class GoldenLayout extends BaseElement {
     this.addEventListener(ROOT_LOADED_EVENT, e => {
       e.preventDefault();
       e.stopPropagation();
+      if (this.scopedElements) {
+        for (const [tag, el] of Object.entries(this.scopedElements)) {
+          (e as any).detail.rootElement.defineScopedElement(tag, el);
+        }
+      }
+
       if (!this.layoutConfig) {
         (this._goldenLayout.value as GoldenLayoutClass).loadLayout({
           root: (e as any).detail.root,
@@ -57,12 +63,6 @@ export class GoldenLayout extends BaseElement {
             popout: false,
           },
         });
-      }
-
-      if (this.scopedElements) {
-        for (const [tag, el] of Object.entries(this.scopedElements)) {
-          (e as any).detail.rootElement.defineScopedElement(tag, el);
-        }
       }
     });
   }

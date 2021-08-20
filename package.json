@@ -55,6 +55,7 @@
       "@typescript-eslint"
     ],
     "rules": {
+      "import/no-extraneous-dependencies": "off",
       "no-new": "off",
       "import/extensions": "off",
       "no-param-reassign": "off",

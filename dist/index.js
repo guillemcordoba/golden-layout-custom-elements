@@ -8366,6 +8366,11 @@ class GoldenLayout extends BaseElement {
         this.addEventListener(ROOT_LOADED_EVENT, e => {
             e.preventDefault();
             e.stopPropagation();
+            if (this.scopedElements) {
+                for (const [tag, el] of Object.entries(this.scopedElements)) {
+                    e.detail.rootElement.defineScopedElement(tag, el);
+                }
+            }
             if (!this.layoutConfig) {
                 this._goldenLayout.value.loadLayout({
                     root: e.detail.root,
@@ -8373,11 +8378,6 @@ class GoldenLayout extends BaseElement {
                         popout: false,
                     },
                 });
-            }
-            if (this.scopedElements) {
-                for (const [tag, el] of Object.entries(this.scopedElements)) {
-                    e.detail.rootElement.defineScopedElement(tag, el);
-                }
             }
         });
     }
@@ -9031,7 +9031,7 @@ class GoldenLayoutRoot extends BaseElement {
             composed: true,
             detail: {
                 root,
-                rootElement: this
+                rootElement: this,
             },
         }));
     }
