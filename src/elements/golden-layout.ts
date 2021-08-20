@@ -12,15 +12,20 @@ import { ContextProvider } from '@holochain-open-dev/context';
 import { BaseElement } from '../utils/base-element';
 import { GOLDEN_LAYOUT_CONTEXT } from '../utils/context';
 import { INIT_LAYOUT_EVENT, ROOT_LOADED_EVENT } from '../utils/events';
+import { Constructor } from '@open-wc/scoped-elements/types/src/types';
 
 export class GoldenLayout extends BaseElement {
+  @property()
+  scopedElements: { [key: string]: Constructor<HTMLElement> } | undefined =
+    undefined;
+
+  @property()
+  layoutConfig: LayoutConfig | undefined = undefined;
+
   _goldenLayout = new ContextProvider(
     this,
     GOLDEN_LAYOUT_CONTEXT as unknown as never
   );
-
-  @property()
-  layoutConfig: LayoutConfig | undefined = undefined;
 
   connectedCallback() {
     super.connectedCallback();
@@ -52,6 +57,12 @@ export class GoldenLayout extends BaseElement {
             popout: false,
           },
         });
+      }
+
+      if (this.scopedElements) {
+        for (const [tag, el] of Object.entries(this.scopedElements)) {
+          (e as any).detail.rootElement.defineScopedElement(tag, el);
+        }
       }
     });
   }

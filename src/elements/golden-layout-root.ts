@@ -42,6 +42,7 @@ export class GoldenLayoutRoot extends BaseElement {
         composed: true,
         detail: {
           root,
+          rootElement: this
         },
       })
     );

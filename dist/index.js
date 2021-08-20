@@ -8346,8 +8346,9 @@ const INIT_LAYOUT_EVENT = 'init-layout';
 const ROOT_LOADED_EVENT = 'root-loaded';
 
 class GoldenLayout extends BaseElement {
-    _goldenLayout = new ContextProvider(this, GOLDEN_LAYOUT_CONTEXT);
+    scopedElements = undefined;
     layoutConfig = undefined;
+    _goldenLayout = new ContextProvider(this, GOLDEN_LAYOUT_CONTEXT);
     connectedCallback() {
         super.connectedCallback();
         this.addEventListener(INIT_LAYOUT_EVENT, e => {
@@ -8373,6 +8374,11 @@ class GoldenLayout extends BaseElement {
                     },
                 });
             }
+            if (this.scopedElements) {
+                for (const [tag, el] of Object.entries(this.scopedElements)) {
+                    e.detail.rootElement.defineScopedElement(tag, el);
+                }
+            }
         });
     }
     saveLayout() {
@@ -8392,6 +8398,9 @@ class GoldenLayout extends BaseElement {
         ];
     }
 }
+__decorate([
+    property()
+], GoldenLayout.prototype, "scopedElements", void 0);
 __decorate([
     property()
 ], GoldenLayout.prototype, "layoutConfig", void 0);
@@ -9022,6 +9031,7 @@ class GoldenLayoutRoot extends BaseElement {
             composed: true,
             detail: {
                 root,
+                rootElement: this
             },
         }));
     }
