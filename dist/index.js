@@ -5936,11 +5936,9 @@ class DragSource {
         this._componentState = _componentState;
         this._title = _title;
         this._dragListener = null;
-        // Need to review dummyGroundContainer
-        // Should this part of a fragment or template?
-        // Does this need to be regenerated with each drag operation?
         this._dummyGroundContainer = document.createElement('div');
-        this._dummyGroundContentItem = new GroundItem(this._layoutManager, this._layoutManager.layoutConfig.root, this._dummyGroundContainer);
+        const dummyRootItemConfig = ResolvedRowOrColumnItemConfig.createDefault('row');
+        this._dummyGroundContentItem = new GroundItem(this._layoutManager, dummyRootItemConfig, this._dummyGroundContainer);
         this.createDragListener();
     }
     /**
@@ -6093,9 +6091,9 @@ const i18nStrings = new Array(I18nStrings.idCount);
 class DropTargetIndicator {
     constructor(rootContainer) {
         // Maybe use container instead of Document Body?
-        this._element = document.createElement("div");
+        this._element = document.createElement('div');
         this._element.classList.add("lm_dropTargetIndicator" /* DropTargetIndicator */);
-        const innerElement = document.createElement("div");
+        const innerElement = document.createElement('div');
         innerElement.classList.add("lm_inner" /* Inner */);
         this._element.appendChild(innerElement);
         if (rootContainer) {
@@ -6113,7 +6111,7 @@ class DropTargetIndicator {
         this._element.style.top = numberToPixels(area.y1);
         this._element.style.width = numberToPixels(area.x2 - area.x1);
         this._element.style.height = numberToPixels(area.y2 - area.y1);
-        this._element.style.display = "block";
+        this._element.style.display = 'block';
     }
     hide() {
         setElementDisplayVisibility(this._element, false);
@@ -7048,7 +7046,7 @@ class LayoutManager extends EventEmitter {
     }
     /** @internal */
     startComponentDrag(x, y, dragListener, componentItem, stack) {
-        new DragProxy(x, y, dragListener, this, componentItem, stack);
+        new DragProxy(x, y, dragListener, this, componentItem, stack, this.container);
     }
     /**
      * Programmatically focuses an item. This focuses the specified component item
