@@ -5928,13 +5928,16 @@ class DragSource {
     /** @internal */
     _componentState, 
     /** @internal */
-    _title) {
+    _title, 
+    /** @internal */
+    _rootContainer) {
         this._layoutManager = _layoutManager;
         this._element = _element;
         this._extraAllowableChildTargets = _extraAllowableChildTargets;
         this._componentTypeOrFtn = _componentTypeOrFtn;
         this._componentState = _componentState;
         this._title = _title;
+        this._rootContainer = _rootContainer;
         this._dragListener = null;
         this._dummyGroundContainer = document.createElement('div');
         const dummyRootItemConfig = ResolvedRowOrColumnItemConfig.createDefault('row');
@@ -5997,7 +6000,7 @@ class DragSource {
             throw new UnexpectedNullError('DSODSD66746');
         }
         else {
-            const dragProxy = new DragProxy(x, y, this._dragListener, this._layoutManager, componentItem, this._dummyGroundContentItem);
+            const dragProxy = new DragProxy(x, y, this._dragListener, this._layoutManager, componentItem, this._dummyGroundContentItem, this._rootContainer);
             const transitionIndicator = this._layoutManager.transitionIndicator;
             if (transitionIndicator === null) {
                 throw new UnexpectedNullError('DSODST66746');
@@ -7032,7 +7035,7 @@ class LayoutManager extends EventEmitter {
      *          removeDragSource() later to get rid of the drag listeners.
      */
     newDragSource(element, componentTypeOrFtn, componentState, title) {
-        const dragSource = new DragSource(this, element, [], componentTypeOrFtn, componentState, title);
+        const dragSource = new DragSource(this, element, [], componentTypeOrFtn, componentState, title, this.container);
         this._dragSources.push(dragSource);
         return dragSource;
     }
