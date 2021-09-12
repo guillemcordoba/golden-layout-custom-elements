@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { property } from 'lit/decorators.js';
-import { ContextProvider, ContextController } from '@holochain-open-dev/context';
+import { createContext, ContextProvider, ContextConsumer } from '@lit-labs/context';
 import { ScopedElementsMixin } from '@open-wc/scoped-elements';
 import { ref } from 'lit/directives/ref.js';
 
@@ -8340,7 +8340,7 @@ class BaseElement extends ScopedElementsMixin(LitElement) {
     }
 }
 
-const GOLDEN_LAYOUT_CONTEXT = 'GOLDEN_LAYOUT_CONTEXT';
+const goldenLayoutContext = createContext('golden-layout/root');
 
 const INIT_LAYOUT_EVENT = 'init-layout';
 const ROOT_LOADED_EVENT = 'root-loaded';
@@ -8348,7 +8348,7 @@ const ROOT_LOADED_EVENT = 'root-loaded';
 class GoldenLayout extends BaseElement {
     scopedElements = undefined;
     layoutConfig = undefined;
-    _goldenLayout = new ContextProvider(this, GOLDEN_LAYOUT_CONTEXT);
+    _goldenLayoutContext = new ContextProvider(this, goldenLayoutContext);
     connectedCallback() {
         super.connectedCallback();
         this.addEventListener(INIT_LAYOUT_EVENT, e => {
@@ -8361,7 +8361,7 @@ class GoldenLayout extends BaseElement {
             layout.registerComponentFactoryFunction('native-html-component', (container, state) => {
                 container.element.innerHTML = state.html;
             });
-            this._goldenLayout.setValue(layout);
+            this._goldenLayoutContext.setValue(layout);
         });
         this.addEventListener(ROOT_LOADED_EVENT, e => {
             e.preventDefault();
@@ -8372,7 +8372,7 @@ class GoldenLayout extends BaseElement {
                 }
             }
             if (!this.layoutConfig) {
-                this._goldenLayout.value.loadLayout({
+                this._goldenLayoutContext.value.loadLayout({
                     root: e.detail.root,
                     header: {
                         popout: false,
@@ -8382,7 +8382,7 @@ class GoldenLayout extends BaseElement {
         });
     }
     saveLayout() {
-        return this._goldenLayout.value.saveLayout();
+        return this._goldenLayoutContext.value.saveLayout();
     }
     render() {
         return html ` <slot></slot> `;
@@ -8498,11 +8498,11 @@ class GoldenLayoutRegister extends BaseElement {
     async firstUpdated() {
         const children = await this.getSlottedChildren();
         const template = children[0];
-        new ContextController(this, value => {
+        new ContextConsumer(this, goldenLayoutContext, value => {
             if (value) {
                 this.register(value, template);
             }
-        }, GOLDEN_LAYOUT_CONTEXT);
+        });
     }
     render() {
         return html ` <slot id="slot"></slot>`;
@@ -8526,11 +8526,11 @@ class GoldenLayoutDragSource extends BaseElement {
     componentType;
     async firstUpdated() {
         const children = await this.getSlottedChildren();
-        new ContextController(this, value => {
+        new ContextConsumer(this, goldenLayoutContext, value => {
             if (value) {
                 value.newDragSource(children[0], this.componentType);
             }
-        }, GOLDEN_LAYOUT_CONTEXT);
+        });
     }
     render() {
         return html `<slot id="slot"></slot>`;

@@ -1,1 +1,3 @@
-export declare const GOLDEN_LAYOUT_CONTEXT = "GOLDEN_LAYOUT_CONTEXT";
+import { GoldenLayout } from 'golden-layout';
+import { Context } from '@lit-labs/context';
+export declare const goldenLayoutContext: Context<GoldenLayout>;
